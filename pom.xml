@@ -15,19 +15,34 @@
         <junit-jupiter-api.version>5.10.0</junit-jupiter-api.version>
         <spark.version>2.9.4</spark.version>
         <scala.version>2.11</scala.version>
+        <spark-sql.version>3.4.0</spark-sql.version>
+        <spark.revision>2.13</spark.revision>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.sparkjava</groupId>
-            <artifactId>spark-core</artifactId>
-            <version>2.9.4</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.13.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.13</artifactId>
-            <version>3.4.1</version>
+            <artifactId>spark-core_${spark.revision}</artifactId>
+            <version>${spark-sql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${spark.revision}</artifactId>
+            <version>${spark-sql.version}</version>
         </dependency>
 
         <dependency>
@@ -59,6 +74,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>
+                        --illegal-access=permit
                         --add-opens=java.base/java.lang=ALL-UNNAMED
                         --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
                         --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
@@ -83,14 +99,18 @@
                 <configuration>
                     <mainClass>org.bambrikii.examples.spark3.Spark3App</mainClass>
                     <layout>ZIP</layout>
+                    <layers>
+                        <enabled>true</enabled>
+                        <configuration>${project.basedir}/src/layers.xml</configuration>
+                    </layers>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!--                <executions>-->
+                <!--                    <execution>-->
+                <!--                        <goals>-->
+                <!--                            <goal>repackage</goal>-->
+                <!--                        </goals>-->
+                <!--                    </execution>-->
+                <!--                </executions>-->
             </plugin>
         </plugins>
     </build>
